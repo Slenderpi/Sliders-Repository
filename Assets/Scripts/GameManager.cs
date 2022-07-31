@@ -16,13 +16,23 @@ public class GameManager : MonoBehaviour {
 	public GameObject dIndicatorPrefab;
 	public GameObject directionIndicator { get; private set; }
 
+	public AudioClip swipeSound;
+	public AudioClip collideSound;
+
+	AudioSource asource;
+
 	private void Awake() {
-		instance = this;
+		if (instance) {
+			Destroy(gameObject);
+		} else {
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
 	}
 
 	// Start is called before the first frame update
 	void Start() {
-		//canSwipe = false;
+		asource = GetComponent<AudioSource>();
 
 		// Temporary
 		StartRound();
@@ -49,6 +59,22 @@ public class GameManager : MonoBehaviour {
 	public static void HasSwiped() {
 		if (OnHasSwiped != null)
 			OnHasSwiped();
+	}
+
+	public void PlaySound(string type) {
+		AudioClip sound = null;
+		switch(type) {
+			case "swipe":
+				sound = swipeSound;
+				break;
+			case "collide":
+				sound = collideSound;
+				break;
+			default:
+				sound = collideSound;
+				break;
+		}
+		asource.PlayOneShot(sound);
 	}
 
 }

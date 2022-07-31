@@ -101,6 +101,8 @@ public class Slider : MonoBehaviour {
 			ss1.SendSlider(new Vector3(rb.velocity.z, 0, rb.velocity.x));
 			ss2.SendSlider(new Vector3(-rb.velocity.z, 0, -rb.velocity.x));
 
+			GameManager.instance.PlaySound("collide");
+
 			Destroy(gameObject);
 		}
 	}
@@ -110,6 +112,7 @@ public class Slider : MonoBehaviour {
 		if (direction.magnitude <= GameManager.MIN_DRAG_DISTANCE)
 			return;
 		GameManager.HasSwiped();
+		GameManager.instance.PlaySound("swipe");
 		isSliding = true;
 		rb.velocity = (Mathf.Abs(direction.x) > Mathf.Abs(direction.y) ? new Vector3(direction.x, 0, 0) : new Vector3(0, 0, direction.y)).normalized * velocity;
 	}
