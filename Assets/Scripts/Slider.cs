@@ -71,24 +71,7 @@ public class Slider : MonoBehaviour {
 		}
 	}
 
-	private void OnTriggerStay(Collider other) {
-		if (isSliding && other.CompareTag("Slider")) {
-			// The sliding slider will handle collision logic
-			GameObject sg1 = other.gameObject;
-			Slider ss1 = sg1.GetComponent<Slider>();
-			if (ss1.isSliding)
-				return;
-			GameObject sg2 = Instantiate(gameObject, sg1.transform.position, sg1.transform.rotation);
-			Slider ss2 = sg2.GetComponent<Slider>();
-
-			ss1.SendSlider(new Vector3(rb.velocity.z, 0, rb.velocity.x));
-			ss2.SendSlider(new Vector3(-rb.velocity.z, 0, -rb.velocity.x));
-
-			Destroy(gameObject);
-		}
-	}
-
-	//private void OnTriggerEnter(Collider other) {
+	//private void OnTriggerStay(Collider other) {
 	//	if (isSliding && other.CompareTag("Slider")) {
 	//		// The sliding slider will handle collision logic
 	//		GameObject sg1 = other.gameObject;
@@ -104,6 +87,23 @@ public class Slider : MonoBehaviour {
 	//		Destroy(gameObject);
 	//	}
 	//}
+
+	private void OnTriggerEnter(Collider other) {
+		if (isSliding && other.CompareTag("Slider")) {
+			// The sliding slider will handle collision logic
+			GameObject sg1 = other.gameObject;
+			Slider ss1 = sg1.GetComponent<Slider>();
+			if (ss1.isSliding)
+				return;
+			GameObject sg2 = Instantiate(gameObject, sg1.transform.position, sg1.transform.rotation);
+			Slider ss2 = sg2.GetComponent<Slider>();
+
+			ss1.SendSlider(new Vector3(rb.velocity.z, 0, rb.velocity.x));
+			ss2.SendSlider(new Vector3(-rb.velocity.z, 0, -rb.velocity.x));
+
+			Destroy(gameObject);
+		}
+	}
 
 	void OnSwipe() {
 		Vector2 direction = mouseUpPos - mouseDownPos;
