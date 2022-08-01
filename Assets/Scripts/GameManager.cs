@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
 	public static event BindableEvent SetData;
 
 	public readonly static float MIN_DRAG_DISTANCE = 10f;
-	public static float sliderVelocity = 12f;
+	public static float sliderVelocity = 8f;
 
 	public GameObject dIndicatorPrefab;
 	public GameObject directionIndicator { get; private set; }
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
 	void Start() {
 		asource = GetComponent<AudioSource>();
 
-		// Temporary
+		LevelManager.instance.GenerateRound(2);
 		StartRound();
 	}
 
