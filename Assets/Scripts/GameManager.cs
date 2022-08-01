@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour {
 	public static event BindableEvent SetData;
 
 	public readonly static float MIN_DRAG_DISTANCE = 10f;
-	public static float sliderVelocity = 8f;
+	public static float sliderVelocity = 12f;
 
 	public GameObject dIndicatorPrefab;
 	public GameObject directionIndicator { get; private set; }
@@ -34,26 +35,35 @@ public class GameManager : MonoBehaviour {
 	void Start() {
 		asource = GetComponent<AudioSource>();
 
-		LevelManager.instance.GenerateRound(2);
+		SceneManager.sceneLoaded += Bruh;
+
+		LevelManager.instance.GenerateRound(10);
 		StartRound();
 	}
 
 	// Update is called once per frame
 	void Update() {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			RestartRound();
+		}
+	}
 
+	void Bruh(Scene scene, LoadSceneMode mode) {
+		print("RELOADING MAP");
+		LevelManager.instance.RecreateSlidersFromMap();
+		StartRound();
 	}
 
 	public void StartRound() {
-		//canSwipe = true;
 		directionIndicator = Instantiate(dIndicatorPrefab);
 		directionIndicator.SetActive(false);
 
 		if (SetData != null)
 			SetData();
-		//Slider[] sliders = Resources.FindObjectsOfTypeAll<Slider>();
-		//foreach (Slider s in sliders) {
-		//	s.gameObject.SetActive(true);
-		//}
+	}
+
+	public void RestartRound() {
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	public static void HasSwiped() {
